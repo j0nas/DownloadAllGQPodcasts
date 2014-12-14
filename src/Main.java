@@ -15,10 +15,13 @@ public class Main {
 
         final String saveDir = "C:\\Users\\Jonas\\Desktop\\GQ Podcasts\\";
         for (final Element podcast : podcasts) {
-            String downloadUrl = podcast.select("a[href]").attr("href");
+            URL downloadUrl = new URL(podcast.select("a[href]").attr("href"));
+
             String title = podcast.select("h3.episode_title a").html();
-            System.out.println("Downloading: " + title);
-            org.apache.commons.io.FileUtils.copyURLToFile(new URL(downloadUrl), new File(saveDir + title + ".mp3"), 0, 0);
+            File downloadLocation = new File(saveDir + title.replaceAll("[^a-zA-Z0-9\\.\\-]", " ").trim() + ".mp3");
+
+            System.out.println("Downloading: " + title + " to " + downloadLocation.getAbsolutePath());
+            org.apache.commons.io.FileUtils.copyURLToFile(downloadUrl, downloadLocation, 0, 0);
         }
     }
 }
